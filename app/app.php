@@ -1,9 +1,10 @@
 <?php
     require_once __DIR__."/../vendor/autoload.php";
+    require_once __DIR__."/../src/Rectangle.php";
 
     $app = new Silex\Application();
 
-    $app->get("/", function() {
+    $app->get("/new_rectangle", function() {
         return
         "<!DOCTYPE html>
         <html>
@@ -15,7 +16,7 @@
             <div class='container'>
                 <h1>Rectangle Checker</h1>
                 <p>Enter the dimensions of your rectangle to see if it's a square.</p>
-                <form action= 'Rectangle.php'>
+                <form action= '/view_rectangle'>
                     <div class='form-group'>
                       <label for='length'>Enter the length:</label>
                       <input id='length' name='length' class='form-control' type='number'>
@@ -31,5 +32,14 @@
         </html>"
         ;
     });
+    $app->get("/view_rectangle", function() {
+        $my_rectangle = new Rectangle($_GET['length'], $_GET['width']);
+        $area = $my_rectangle->getArea();
+        if ($my_rectangle->isSquare()) {
+            return "<h1>Congratulations! You made a square! Its area is $area.</h1>";} else {
+                return "<h1>Sorry! This isn't a square. Its area is $area.</h1>";
+        }
+    });
+
     return $app;
 ?>
